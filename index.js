@@ -19,30 +19,31 @@ const cardPool = ['A','A','A','A',
 const suits = ['\u2660','\u2665','\u2663','\u2666']
 let currentCards = []
 let pot = 100
-let ante = 5
+let ante = document.getElementById("ante-input")
 
-// 2. Create a startGame() function. Move the conditional
-// below (line 11-20) inside the body of the function.
+document.getElementById("pot-el").textContent = `Pot: ${pot}`
 
 function checkStatus() {
-       if (sum <= 20) {
+    if (sum <= 20) {
         message = "Do you want to draw a new card?"
     } else if (sum === 21) {
-        message = "Wohoo! You've got Blackjack!"
+        message = "You've got Blackjack!"
         hasBlackJack = true
-        console.log('blackjack')
+        pot += ante.value * 2
+        document.getElementById("pot-el").textContent = `Pot: ${pot}`
     } else {
         message = "You're out of the game!"
         isAlive = false
-        console.log('dead')
     }
     document.getElementById("message-el").textContent = message 
     if (isAlive & !hasBlackJack) {
         document.getElementById("card-btn").style.display = "inline"
         document.getElementById("start-btn").style.display = "none"
+        ante.disabled = true
     } else {
         document.getElementById("card-btn").style.display = "none"
-        document.getElementById("start-btn").style.display = "inline"}
+        document.getElementById("start-btn").style.display = "inline"
+        ante.disabled = false}
 }
 
 function drawCard() {
@@ -50,30 +51,36 @@ function drawCard() {
     let nextCard = Math.floor(Math.random() * cardPool.length)
     if (!currentCards.includes(nextCard)) {
         currentCards.push(nextCard)
-    } else {drawCard()}
-    const cardEl = document.createElement("div")
-    cardsContainer.appendChild(cardEl)
-    cardEl.classList.add('card')
-    const cardNum = cardPool[nextCard]
-    const cardSuit = suits[nextCard % 4]
-    if (nextCard % 4 === 1 | nextCard % 4 === 3) {
-        cardEl.classList.add('red')
+        const cardEl = document.createElement("div")
+        cardsContainer.appendChild(cardEl)
+        cardEl.classList.add('card')
+        const cardNum = cardPool[nextCard]
+        const cardSuit = suits[nextCard % 4]
+        if (nextCard % 4 === 1 | nextCard % 4 === 3) {
+            cardEl.classList.add('red')
+        }
+        let cardValue = 0
+        if (cardNum === 'A' & sum + 11 <= 21) {
+            cardValue = 11
+        } else if (cardNum === 'A' & sum + 11 > 21) {
+            cardValue = 1
+        } else if (faceCards.includes(cardNum)) {
+            cardValue = 10
+        } else {cardValue = cardNum}
+        
+        cardEl.innerHTML = `${cardNum}<br>${cardSuit}`
+        
+        sum += cardValue
+        document.getElementById("sum-el").textContent = `Sum: ${sum}`
+    } else {
+        // if "drawn card" has already been drawn:
+        //  prevent endless loop if all cards have been drawn
+        if (currentCards.length >= 52) {
+            currentCards = []
+        }
+        //  then try again
+        drawCard()
     }
-    let cardValue = 0
-    if (cardNum === 'A' & sum + 11 <= 21) {
-        cardValue = 11
-    } else if (cardNum === 'A' & sum + 11 > 21) {
-        cardValue = 1
-    } else if (faceCards.includes(cardNum)) {
-        cardValue = 10
-    } else {cardValue = cardNum}
-    
-    cardEl.innerHTML = `${cardNum}<br>${cardSuit}`
-    
-    sum += cardValue
-    console.log(`new care: ${cardValue}`)
-    console.log(`new sum: ${sum}`)
-    document.getElementById("sum-el").textContent = `Sum: ${sum}`
 }
 
 function newCard() {
@@ -88,13 +95,21 @@ function startGame() {
     sum = 0
     currentCards = []
     hasBlackJack = false
-    isAlive = true
-    console.log('new game')
     document.getElementById("cards-el").textContent = "Cards: "
     cardsContainer.innerHTML = ""
     document.getElementById("sum-el").textContent = "Sum: "
-    drawCard()
-    drawCard()
-    checkStatus()
+    document.getElementById("pot-el").textContent = `Pot: ${pot}`
+    if (ante.value > pot) {
+        message = "You don't have enough money left to play :("
+        document.getElementById("message-el").textContent = message 
+    } else {
+        isAlive = true
+        ante.disabled = true
+        pot -= ante.value
+        document.getElementById("pot-el").textContent = `Pot: ${pot}`
+        drawCard()
+        drawCard()
+        checkStatus()
+    }
 }
 

@@ -54,3 +54,7 @@ button {
 .red {
     color: red;
 }
+
+input {
+    width: 50px;
+}
