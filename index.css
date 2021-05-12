@@ -15,16 +15,17 @@ h1 {
     color: goldenrod;
 }
 
+h2 {
+    color: silver;
+}
+
+input {
+    width: 50px;
+}
+
 #message-el {
     font-style: italic;
 }
-
-/* 
-3. Style the button according to the provided design
-text color - #016f32
-width      - 150px
-background - goldenrod
- */
  
 button {
     padding: 10px 50px;
@@ -36,7 +37,8 @@ button {
     border-radius: 5px;
 }
 
-#card-btn {
+#card-btn,
+#hold-btn {
     display: none;
 }
 
@@ -55,6 +57,15 @@ button {
     color: red;
 }
 
-input {
-    width: 50px;
+.face-down {
+    background-color: darkred;
+    padding-top: 10px;
+    color: white;
+    border: solid 3px white;
+    transition: background-color 1s ease-out;
 }
+
+.flipped {
+    background-color: white;
+}
+

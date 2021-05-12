@@ -4,12 +4,21 @@
     </head>
     <body>
         <h1>Blackjack</h1>
+        <div id='dealer-area'>
+            <h2>Dealer</h2>
+            <div id="dealer-cards-div">
+            </div>
+            <p id="dealer-sum-el">Sum:</p>
+        </div>
         <p id="message-el">Want to play a round?</p>
-        <p id="cards-el">Cards:  </p>
-        <div id="cards-div"></div>
-        <p id="sum-el">Sum:</p>
-        <button id="start-btn" onclick="startGame()">Start game</button>
-        <button id="card-btn" onclick="newCard()">Hit Me</button>
+        <div id='player-area'>
+            <h2>You</h2>
+            <div id="cards-div"></div>
+            <p id="sum-el">Sum:</p>
+            <button id="start-btn" onclick="startGame()">Start game</button>
+            <button id="card-btn" onclick="newCard()">Hit Me</button>
+            <button id="hold-btn" onclick="hold()">Hold</button>
+        </div>
         <p id="pot-el"></p>
         <label>Ante: <input id="ante-input" type="number" value=5></label>
         <script src="index.js"></script>
